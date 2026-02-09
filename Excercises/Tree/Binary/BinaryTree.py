@@ -8,13 +8,13 @@ class BinaryTreeNode:
         if self.data == data:
             return
 
-        if self.data < data:
+        if data < self.data:
             if self.left:
                 self.left.add_child(data)
             else:
                 self.left = BinaryTreeNode(data)
 
-        if self.data > data:
+        if data > self.data:
             if self.right:
                 self.right.add_child(data)
             else:
@@ -24,13 +24,13 @@ class BinaryTreeNode:
         if self.data == value:
             return True
 
-        if self.data < value:
+        if value < self.data:
             if self.left:
                 return self.left.search(value)
             else:
                 return False
 
-        if self.data > value:
+        if value > self.data:
             if self.right:
                 return self.right.search(value)
             else:
@@ -54,6 +54,62 @@ class BinaryTreeNode:
 
         return  elements
 
+    def pre_order_traversal(self):
+        elements = []
+
+        # Root Node
+        elements.append(self.data)
+
+        # Left Tree
+        if self.left:
+            elements += self.left.pre_order_traversal()
+
+        # Right Node
+        if self.right:
+            elements += self.right.pre_order_traversal()
+
+        return elements
+
+    def post_order_traversal(self):
+        elements = []
+
+        # Left Tree
+        if self.left:
+            elements += self.left.post_order_traversal()
+
+        # Right Node
+        if self.right:
+            elements += self.right.post_order_traversal()
+
+        # Root Node
+        elements.append(self.data)
+
+        return elements
+
+    def find_min(self):
+        if self.left is None:
+            return self.data
+        else:
+            return self.left.find_min()
+
+    def find_max(self):
+        if self.right is None:
+            return self.data
+        else:
+            return self.right.find_max()
+
+
+    def find_sum(self):
+        total = self.data
+
+        if self.left:
+            total += self.left.find_sum()
+
+        if  self.right:
+            total += self.right.find_sum()
+
+        return  total
+
 def build_tree(elements):
     root = BinaryTreeNode(elements[0])
 
@@ -72,3 +128,9 @@ if __name__ == "__main__":
 
     numbers_tree = build_tree([17, 4, 1, 20, 9, 23, 18, 34])
     print("In order traversal gives this sorted list:", numbers_tree.inorder_traversal())
+    print("Post order traversal gives this sorted list:", numbers_tree.pre_order_traversal())
+    print("Pre order traversal gives this sorted list:", numbers_tree.post_order_traversal())
+
+    print(numbers_tree.find_min())
+    print(numbers_tree.find_max())
+    print(numbers_tree.find_sum())
