@@ -110,6 +110,29 @@ class BinaryTreeNode:
 
         return  total
 
+    def delete(self, value):
+        if value < self.data:
+            if self.left:
+                self.left = self.left.delete(value)
+        elif value > self.data:
+            if self.right:
+                self.right = self.right.delete(value)
+
+        else:
+            if self.left is None and self.right is None:
+                return None
+            elif self.left is None:
+                return self.right
+            elif self.right is None:
+                return self.left
+
+            min_val = self.right.find_min()
+            self.data = min_val
+            self.right = self.right.delete(min_val)
+
+        return self
+
+
 def build_tree(elements):
     root = BinaryTreeNode(elements[0])
 
@@ -134,3 +157,6 @@ if __name__ == "__main__":
     print(numbers_tree.find_min())
     print(numbers_tree.find_max())
     print(numbers_tree.find_sum())
+
+    deleted_tree = numbers_tree.delete(1)
+    print("After deleting 20, in order traversal gives this sorted list:", deleted_tree.inorder_traversal())
