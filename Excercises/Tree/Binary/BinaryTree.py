@@ -110,13 +110,13 @@ class BinaryTreeNode:
 
         return  total
 
-    def delete(self, value):
+    def delete_from_right_sub_tree(self, value):
         if value < self.data:
             if self.left:
-                self.left = self.left.delete(value)
+                self.left = self.left.delete_from_right_sub_tree(value)
         elif value > self.data:
             if self.right:
-                self.right = self.right.delete(value)
+                self.right = self.right.delete_from_right_sub_tree(value)
 
         else:
             if self.left is None and self.right is None:
@@ -128,7 +128,29 @@ class BinaryTreeNode:
 
             min_val = self.right.find_min()
             self.data = min_val
-            self.right = self.right.delete(min_val)
+            self.right = self.right.delete_from_right_sub_tree(min_val)
+
+        return self
+
+    def delete_from_left_sub_tree(self, value):
+        if value < self.data:
+            if self.left:
+                self.left = self.left.delete_from_left_sub_tree(value)
+        elif value > self.data:
+            if self.right:
+                self.right = self.right.delete_from_left_sub_tree(value)
+
+        else:
+            if self.left is None and self.right is None:
+                return None
+            elif self.left is None:
+                return self.right
+            elif self.right is None:
+                return self.left
+
+            max_value = self.left.find_max()
+            self.data = max_value
+            self.left = self.left.delete_from_left_sub_tree(max_value)
 
         return self
 
@@ -158,5 +180,8 @@ if __name__ == "__main__":
     print(numbers_tree.find_max())
     print(numbers_tree.find_sum())
 
-    deleted_tree = numbers_tree.delete(1)
-    print("After deleting 20, in order traversal gives this sorted list:", deleted_tree.inorder_traversal())
+    deleted_tree_from_right = numbers_tree.delete_from_right_sub_tree(20)
+    print("After deleting 20 from right sub tree, in order traversal gives this sorted list:", deleted_tree_from_right.inorder_traversal())
+
+    deleted_tree_from_left = numbers_tree.delete_from_left_sub_tree(20)
+    print("After deleting 20 from left sub tree, in order traversal gives this sorted list:", deleted_tree_from_left.inorder_traversal())
